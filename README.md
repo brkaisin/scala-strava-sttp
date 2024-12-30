@@ -70,14 +70,15 @@ obtain an access token using the OAuth2 authorization code flow. Here is a brief
 1. **Register your application:** Go to the [Strava Developers Portal](https://developers.strava.com/) and create a new
    application to obtain your client ID and client secret.
 2. **Redirect the user to the authorization URL:** Construct the authorization URL with your client ID and the desired
-   scopes. Redirect the user to this URL to grant access to your application. Here is an example of how to construct the authorization URL:
+   scopes. Redirect the user to this URL to grant access to your application. Here is an example of how to construct the 
+   authorization URL:
     ```scala
     import be.brkaisin.strava.StravaPermission
     import be.brkaisin.strava.auth.AuthorizationUrl
     
     val authorizationUrl: String = AuthorizationUrl(
       clientId = "CLIENT_ID", // Your Strava client ID
-      redirectUri = "http://localhost:8080/catch-code",
+      redirectUri = "http://localhost:8080/catch-code", // Your redirect URI, configured in your Strava application
       permissions = List(StravaPermission.Read, StravaPermission.ActivityRead),
       approvalPrompt = "force"
     ).build
