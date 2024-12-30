@@ -76,7 +76,7 @@ obtain an access token using the OAuth2 authorization code flow. Here is a brief
     import be.brkaisin.strava.auth.AuthorizationUrl
     
     val authorizationUrl: String = AuthorizationUrl(
-      clientId = "123456",
+      clientId = "CLIENT_ID", // Your Strava client ID
       redirectUri = "http://localhost:8080/catch-code",
       permissions = List(StravaPermission.Read, StravaPermission.ActivityRead),
       approvalPrompt = "force"
@@ -86,7 +86,7 @@ obtain an access token using the OAuth2 authorization code flow. Here is a brief
    This will generate the following URL:
 
     ```
-    https://www.strava.com/oauth/authorize?client_id=123456&response_type=code&redirect_uri=http://localhost:8080/catch-code&approval_prompt=force&scope=read,activity:read
+    https://www.strava.com/oauth/authorize?client_id=CLIENT_ID&response_type=code&redirect_uri=http://localhost:8080/catch-code&approval_prompt=force&scope=read,activity:read
     ```
 3. **Receive the authorization code:** After the user grants access, they will be redirected back to your application
    with an authorization code. An example of code catching is shown in the
