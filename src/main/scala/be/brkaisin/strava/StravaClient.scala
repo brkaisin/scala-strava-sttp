@@ -6,7 +6,8 @@ import be.brkaisin.strava.models.{
   Comment,
   DetailedAthlete,
   SummaryActivity,
-  SummaryClub
+  SummaryClub,
+  Zones
 }
 import be.brkaisin.strava.utils.SttpUtils
 import be.brkaisin.strava.utils.SttpUtils.monad
@@ -54,6 +55,8 @@ class StravaClient[F[_]: Backend](accessToken: String):
       def getLoggedInAthlete: Safe[DetailedAthlete] =
         get[DetailedAthlete]("/athlete")
 
+      def getLoggedInAthleteZones: Safe[Zones] = get[Zones]("/athlete/zones")
+
       def getLoggedInAthleteClubs(
           page: Int,
           perPage: Int
@@ -84,6 +87,10 @@ class StravaClient[F[_]: Backend](accessToken: String):
     lazy val athlete: AthleteApi[Unsafe] = new AthleteApi[Unsafe]:
       def getLoggedInAthlete: Unsafe[DetailedAthlete] = unsafe(
         api.athlete.getLoggedInAthlete
+      )
+
+      def getLoggedInAthleteZones: Unsafe[Zones] = unsafe(
+        api.athlete.getLoggedInAthleteZones
       )
 
       def getLoggedInAthleteClubs(

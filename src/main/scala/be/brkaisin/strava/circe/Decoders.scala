@@ -50,3 +50,11 @@ object Decoders:
   given Decoder[SummaryAthlete] = derivedCamelDecoder
 
   given Decoder[Comment] = derivedCamelDecoder
+
+  given Decoder[ZoneRange] = derivedCamelDecoder
+
+  given Decoder[HeartRateZoneRanges] = derivedCamelDecoder
+
+  given Decoder[PowerZoneRanges] = derivedCamelDecoder
+
+  given Decoder[Zones] = derivedCamelDecoder
