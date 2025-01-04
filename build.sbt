@@ -7,8 +7,8 @@ lazy val root = (project in file("."))
   .settings(
     name := "scala-strava-sttp",
     libraryDependencies ++= Seq(
-      "com.softwaremill.sttp.client4" %% "core" % "4.0.0-M20",
-      "com.softwaremill.sttp.client4" %% "circe" % "4.0.0-M20",
+      "com.softwaremill.sttp.client4" %% "core" % "4.0.0-M22",
+      "com.softwaremill.sttp.client4" %% "circe" % "4.0.0-M22",
     ),
     scalacOptions ++= Seq(
       "-deprecation",
