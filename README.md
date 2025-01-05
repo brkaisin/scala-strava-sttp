@@ -1,18 +1,18 @@
 # scala-strava-sttp
 
-scala-strava-sttp is a Scala 3 library for accessing the [Strava v3 API](https://developers.strava.com/docs/reference/)
-using the powerful [sttp client](https://github.com/softwaremill/sttp) library.
+[scala-strava-sttp](https://github.com/brkaisin/scala-strava-sttp) is a Scala 3 library for accessing the 
+[Strava v3 API](https://developers.strava.com/docs/reference/) using the powerful
+[sttp client](https://github.com/softwaremill/sttp) library.
 
 This library simplifies the process of interacting with the Strava API, providing a clean and idiomatic Scala interface 
 for developers.
 
-## Features
+## Features [WIP]
 - Strava v3 API support: access the full range of Strava API endpoints for activities, athletes, segments, and more.
 - Powered by sttp: built on top of sttp, offering generic and flexible HTTP client capabilities.
 - [Circe](https://github.com/circe/circe): responses are automatically parsed into case classes using Circe.
 - Asynchronous and Functional: designed for modern Scala applications with support for Cats Effect, ZIO, or any other 
   backend supported by sttp.
-- Easy Configuration: simplify the integration with minimal setup
 
 ## Philosophy
 
@@ -191,15 +191,14 @@ given ExecutionContext = ExecutionContext.global
 val futureStravaClient: StravaClient[Future] =
   StravaClient.future("ACCESS_TOKEN")
 
-val activitiesResponse: SafeFuture[List[SummaryActivity]] =
+val activitiesFuture: SafeFuture[List[SummaryActivity]] =
   futureStravaClient.api.activity.getLoggedInAthleteActivities()
 
-activitiesResponse.onComplete {
-  case Success(safeResponse) =>
-    safeResponse match
-  case Right(activities: List[SummaryActivity]) =>
+activitiesFuture.onComplete {
+  case Success(Right(activities: List[SummaryActivity])) =>
     activities.foreach(println)
-  case Left(error: ResponseException[Fault, circe.Error]) => println(error)
+  case Success(Left(error: ResponseException[Fault, circe.Error])) =>
+    println(error)
   case Failure(exception) => println(exception)
 }
 ```
