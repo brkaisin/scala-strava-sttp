@@ -27,9 +27,13 @@ object Derivation:
       case c              => c.toString
     }.stripPrefix("_")
 
+  private def stripBackticks(s: String): String =
+    s.stripPrefix("`").stripSuffix("`")
+
   /** Derive a decoder for a case class with camelCase keys from a JSON with
     * associated snake_case keys. It is inspired by circe's `deriveDecoder,` but
-    * it converts the keys from snake_case to camelCase. Note that the
+    * it converts the keys from snake_case to camelCase, and removes backticks
+    * from the keys to allow for the use of reserved keywords. Note that the
     * conversion is done at runtime, so it may have a performance impact.
     * Relying on a macro-based solution would be more efficient.
     *
@@ -48,7 +52,7 @@ object Derivation:
             case (acc, (label, decoder)) =>
               acc.flatMap(vec =>
                 decoder
-                  .tryDecode(c.downField(camelToSnake(label)))
+                  .tryDecode(c.downField(camelToSnake(stripBackticks(label))))
                   .map(value => vec :+ value)
               )
           }

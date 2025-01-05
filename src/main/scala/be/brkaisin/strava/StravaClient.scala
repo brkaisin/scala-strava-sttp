@@ -1,11 +1,15 @@
 package be.brkaisin.strava
 
-import be.brkaisin.strava.api.{ActivityApi, AthleteApi, StravaApi}
+import be.brkaisin.strava.api.{ActivityApi, AthleteApi, ClubApi, StravaApi}
 import be.brkaisin.strava.circe.Decoders.given
 import be.brkaisin.strava.models.{
+  ClubActivity,
+  ClubAthlete,
   Comment,
   DetailedAthlete,
+  DetailedClub,
   SummaryActivity,
+  SummaryAthlete,
   SummaryClub,
   Zones
 }
@@ -57,6 +61,34 @@ class StravaClient[F[_]: Backend](accessToken: String):
 
       def getLoggedInAthleteZones: Safe[Zones] = get[Zones]("/athlete/zones")
 
+    lazy val club: ClubApi[Safe] = new ClubApi[Safe]:
+      def getClubActivitiesById(
+          id: Long,
+          page: Int,
+          perPage: Int
+      ): Safe[List[ClubActivity]] = get(
+        s"/clubs/$id/activities?page=$page&per_page=$perPage"
+      )
+
+      def getClubAdminsById(
+          id: Long,
+          page: Int,
+          perPage: Int
+      ): Safe[List[SummaryAthlete]] = get[List[SummaryAthlete]](
+        s"/clubs/$id/admins?page=$page&per_page=$perPage"
+      )
+
+      def getClubById(id: Long): Safe[DetailedClub] =
+        get[DetailedClub](s"/clubs/$id")
+
+      def getClubMembersById(
+          id: Long,
+          page: Int,
+          perPage: Int
+      ): Safe[List[ClubAthlete]] = get[List[ClubAthlete]](
+        s"/clubs/$id/members?page=$page&per_page=$perPage"
+      )
+
       def getLoggedInAthleteClubs(
           page: Int,
           perPage: Int
@@ -93,11 +125,40 @@ class StravaClient[F[_]: Backend](accessToken: String):
         api.athlete.getLoggedInAthleteZones
       )
 
+    lazy val club: ClubApi[Unsafe] = new ClubApi[Unsafe]:
+      def getClubActivitiesById(
+          id: Long,
+          page: Int,
+          perPage: Int
+      ): Unsafe[List[ClubActivity]] = unsafe(
+        api.club.getClubActivitiesById(id, page, perPage)
+      )
+
+      def getClubAdminsById(
+          id: Long,
+          page: Int,
+          perPage: Int
+      ): Unsafe[List[SummaryAthlete]] = unsafe(
+        api.club.getClubAdminsById(id, page, perPage)
+      )
+
+      def getClubById(id: Long): Unsafe[DetailedClub] = unsafe(
+        api.club.getClubById(id)
+      )
+
+      def getClubMembersById(
+          id: Long,
+          page: Int,
+          perPage: Int
+      ): Unsafe[List[ClubAthlete]] = unsafe(
+        api.club.getClubMembersById(id, page, perPage)
+      )
+
       def getLoggedInAthleteClubs(
           page: Int,
           perPage: Int
       ): Unsafe[List[SummaryClub]] = unsafe(
-        api.athlete.getLoggedInAthleteClubs(page, perPage)
+        api.club.getLoggedInAthleteClubs(page, perPage)
       )
 
 object StravaClient:

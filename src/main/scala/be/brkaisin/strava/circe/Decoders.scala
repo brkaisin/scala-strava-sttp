@@ -58,3 +58,9 @@ object Decoders:
   given Decoder[PowerZoneRanges] = derivedCamelDecoder
 
   given Decoder[Zones] = derivedCamelDecoder
+
+  given Decoder[ClubActivity] = derivedCamelDecoder
+
+  given Decoder[DetailedClub] = derivedCamelDecoder
+
+  given Decoder[ClubAthlete] = derivedCamelDecoder
