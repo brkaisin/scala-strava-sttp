@@ -46,8 +46,16 @@ which can be a Strava API error or a Circe decoding error. The `UnsafeResponse` 
 the response is always a successful value `T`, and you will have to handle the exceptions yourself, or let your program 
 crash.
 
-Last but not least, you can notice the abstraction of the effect type `F[_]` in the `SafeF` and `UnsafeF` types. This
-allows you to use any effect type you want, as long as it is supported by sttp (or you can write your own backend).
+Last but not least, you can notice that **this library is "doubly 
+[_tagless final_](https://rockthejvm.com/articles/tagless-final-in-scala)"**:
+- The API's are _algebras_ (`trait StravaApi[+R[_]]`). They are abstract interfaces that define the operations you can 
+  perform on the Strava API, and are parameterized by the effect type `R[_]`. The library provides two implementations
+  these _algebras_: one for the `SafeF` effect type, and one for the `UnsafeF` effect type.
+- The [StravaClient](src/main/scala/be/brkaisin/strava/StravaClient.scala) (as well as the 
+  [StravaAuthenticator](src/main/scala/be/brkaisin/strava/auth/StravaAuthenticator.scala)) is a _tagless final_
+  interpreter of these _algebras_, but also a _tagless final algebra_ itself (with `F[_] : sttp.client4.Backend` as the 
+  effect type, the backend being the interpreter of the sttp requests). This means that the library allows you to choose
+  the effect type you want to use, as long as it is supported by sttp, or you can write your own backend/interpreter.
 
 ## Installation
 
